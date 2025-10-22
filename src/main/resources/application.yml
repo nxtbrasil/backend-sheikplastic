@@ -1,0 +1,32 @@
+server:
+  port: 8181
+
+spring:
+  datasource:
+    url: jdbc:sqlserver://localhost:1433;databaseName=sheikplastic;encrypt=false;trustServerCertificate=true
+    username: sa
+    password: ledemi54
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.SQLServerDialect
+        format_sql: true
+    show-sql: true
+
+jwt:
+  secret: f7a93c5e72c8d19e1e9fb1a2c4d87f0a39b6c42fda19e4e27b61fa2d9846c0f9b2c7e1a53f6d1a8eac93f40219a8d9f1
+  expiration: 7200000 # 2 hours in ms
+
+empresa:
+  razao-social: "SheikPlastic Indústria e Comércio de Embalagens Ltda."
+  nome-fantasia: "SheikPlastic"
+  site: "www.sheikplastic.com.br"
+  email: "vendas@sheikplastic.com.br"
+
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
