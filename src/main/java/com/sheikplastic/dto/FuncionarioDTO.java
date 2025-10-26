@@ -8,4 +8,10 @@ public class FuncionarioDTO {
     private String nomeFuncionario;
     private String emailFuncionario;
     private Boolean ativo;
+
+    private Long idFuncao;
+    private String nomeFuncao;
+
+    private Integer idGrupoUsuario;
+    private String nomeGrupoUsuario;
 }
