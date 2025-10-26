@@ -2,6 +2,7 @@ package com.sheikplastic.controller;
 
 import com.sheikplastic.dto.LoginRequest;
 import com.sheikplastic.dto.LoginResponse;
+import com.sheikplastic.dto.TrocaSenhaRequest;
 import com.sheikplastic.model.Funcionario;
 import com.sheikplastic.service.AuthService;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +38,18 @@ public class AuthController {
             return ResponseEntity.ok(f);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+       @PutMapping("/trocar-senha")
+    public ResponseEntity<?> trocarSenha(@RequestBody TrocaSenhaRequest req) {
+        try {
+            authService.trocarSenha(req);
+            return ResponseEntity.ok("Senha alterada com sucesso!");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(new ErrorResponse("erro", e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(new ErrorResponse("erro", "Erro ao trocar senha."));
         }
     }
 

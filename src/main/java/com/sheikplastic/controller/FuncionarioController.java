@@ -9,6 +9,7 @@ import com.sheikplastic.repository.GrupoUsuarioFuncionarioRepository;
 import com.sheikplastic.repository.GrupoUsuarioRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +19,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/funcionarios")
@@ -51,6 +53,14 @@ public class FuncionarioController {
 
     @PostMapping
 public ResponseEntity<?> create(@RequestBody Funcionario f) {
+
+  // valida email existente
+    if (repo.existsByEmailFuncionario(f.getEmailFuncionario())) {
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body("Já existe um funcionário cadastrado com este e-mail: " + f.getEmailFuncionario());
+    }
+
     if (f.getSenhaFuncionarioTexto() != null) {
         byte[] senhaBytes = f.getSenhaFuncionarioTexto().getBytes(StandardCharsets.UTF_16LE);
         f.setSenhaFuncionario(senhaBytes);
@@ -60,7 +70,7 @@ public ResponseEntity<?> create(@RequestBody Funcionario f) {
     Funcionario saved = repo.save(f);
 
     // 2️⃣ Busca o grupo desejado (exemplo: grupo 3)
-    GrupoUsuario grupo = grupoUsuarioRepo.findById(3L)
+    GrupoUsuario grupo = grupoUsuarioRepo.findById(f.getIdGrupoUsuario())
         .orElseThrow(() -> new RuntimeException("Grupo não encontrado"));
 
     // 3️⃣ Cria a chave composta
