@@ -34,4 +34,7 @@ public class Funcionario {
 
     @Column(name = "ativo", nullable = false)
     private Boolean ativo;
+
+    @Transient
+    private Long idGrupoUsuario;
 }

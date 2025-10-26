@@ -23,7 +23,7 @@ public class GrupoService {
 
     public Set<Integer> getGruposDoFuncionario(Long idFuncionario) {
         Set<Integer> grupos = new HashSet<>();
-        List<GrupoUsuarioFuncionario> gufs = gufRepo.findByFuncionarioIdFuncionario(idFuncionario);
+        List<GrupoUsuarioFuncionario> gufs = gufRepo.findByFuncionario_IdFuncionario(idFuncionario);
         for (GrupoUsuarioFuncionario g : gufs) {
             grupos.add(g.getGrupoUsuario().getIdGrupoUsuario());
             collectFilhos(g.getGrupoUsuario().getIdGrupoUsuario(), grupos);
