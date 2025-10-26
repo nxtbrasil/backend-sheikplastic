@@ -9,7 +9,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/funcoes")
-@CrossOrigin(origins = "*")
 public class FuncaoController {
 
     private final FuncaoService funcaoService;
