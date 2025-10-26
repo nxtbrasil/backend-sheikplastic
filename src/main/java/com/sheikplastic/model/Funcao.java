@@ -12,5 +12,7 @@ public class Funcao {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idFuncao;
+
+    @Column(nullable = false, length = 100)
     private String nomeFuncao;
 }
