@@ -2,9 +2,16 @@ package com.sheikplastic.controller;
 
 import com.sheikplastic.model.Funcionario;
 import com.sheikplastic.repository.FuncionarioRepository;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 @RestController
@@ -12,6 +19,9 @@ import java.util.List;
 public class FuncionarioController {
 
     private final FuncionarioRepository repo;
+
+      @Autowired
+    private BCryptPasswordEncoder passwordEncoder; // ✅ Agora o bean é reconhecido
 
     public FuncionarioController(FuncionarioRepository repo) {
         this.repo = repo;
@@ -27,11 +37,18 @@ public class FuncionarioController {
         return repo.findById(id).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PostMapping
-    public ResponseEntity<?> create(@RequestBody Funcionario f){
-        return ResponseEntity.ok(repo.save(f));
+
+@PostMapping
+public ResponseEntity<?> create(@RequestBody Funcionario f) {
+    if (f.getSenhaFuncionarioTexto() != null) {
+        byte[] senhaBytes = f.getSenhaFuncionarioTexto().getBytes(StandardCharsets.UTF_16LE);
+        f.setSenhaFuncionario(senhaBytes);
     }
 
+    Funcionario saved = repo.save(f);
+    return ResponseEntity.ok(saved);
+}
+         
 @PutMapping("/{id}")
 public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Funcionario updated) {
     return repo.findById(id).map(f -> {

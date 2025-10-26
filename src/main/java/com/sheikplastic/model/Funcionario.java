@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "funcionario")
+@Table(name = "Funcionario")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -26,8 +26,11 @@ public class Funcionario {
     @Column(name = "emailFuncionario", nullable = false, length = 100)
     private String emailFuncionario;
 
-    @Column(name = "senhaFuncionario")
+    @Column(name = "senhaFuncionario", nullable = false, columnDefinition = "VARBINARY(MAX)")
     private byte[] senhaFuncionario;
+
+    @Transient // não vai para o banco
+    private String senhaFuncionarioTexto;
 
     @Column(name = "ativo", nullable = false)
     private Boolean ativo;

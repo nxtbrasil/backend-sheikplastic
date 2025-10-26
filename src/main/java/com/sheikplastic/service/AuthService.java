@@ -62,4 +62,5 @@ public LoginResponse login(String email, String senha) {
         f.setAtivo(true);
         return funcionarioRepository.save(f);
     }
+
 }
