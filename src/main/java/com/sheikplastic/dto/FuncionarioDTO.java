@@ -7,6 +7,8 @@ public class FuncionarioDTO {
     private Long idFuncionario;
     private String nomeFuncionario;
     private String emailFuncionario;
+    private String senhaFuncionarioTexto;
+    private byte[] senhaFuncionario;
     private Boolean ativo;
 
     private Long idFuncao;

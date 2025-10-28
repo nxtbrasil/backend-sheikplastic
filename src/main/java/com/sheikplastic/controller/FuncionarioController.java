@@ -92,6 +92,8 @@ public ResponseEntity<?> get(@PathVariable Long id) {
         dto.setIdFuncionario(funcionario.getIdFuncionario());
         dto.setNomeFuncionario(funcionario.getNomeFuncionario());
         dto.setEmailFuncionario(funcionario.getEmailFuncionario());
+        dto.setSenhaFuncionarioTexto(funcionario.getSenhaFuncionarioTexto());
+        dto.setSenhaFuncionario(funcionario.getSenhaFuncionario());
         dto.setAtivo(funcionario.getAtivo());
         dto.setIdFuncao(funcionario.getIdFuncao());
 
