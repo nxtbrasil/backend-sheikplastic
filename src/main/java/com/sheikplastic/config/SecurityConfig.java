@@ -35,7 +35,8 @@ public class SecurityConfig {
                             "/menu/**",
                             "/v3/api-docs/**",
                             "/swagger-ui/**",
-                            "/swagger-ui.html"
+                            "/swagger-ui.html",
+                            "/api/grupos-usuario/**" // 👈 adiciona aqui
                     ).permitAll()
                     .anyRequest().authenticated()
             )
