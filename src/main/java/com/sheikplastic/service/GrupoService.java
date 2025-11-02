@@ -32,7 +32,7 @@ public class GrupoService {
     }
 
     private void collectFilhos(Integer idPai, Set<Integer> grupos) {
-        List<GrupoUsuarioHeranca> filhos = herancaRepo.findByIdIdGrupoPai(idPai);
+        List<GrupoUsuarioHeranca> filhos = herancaRepo.findById_IdGrupoPai(idPai);
         for (GrupoUsuarioHeranca h : filhos) {
             Integer idFilho = h.getGrupoFilho().getIdGrupoUsuario();
             if (!grupos.contains(idFilho)) {

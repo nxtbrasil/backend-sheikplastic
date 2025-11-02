@@ -36,5 +36,5 @@ public class Funcionario {
     private Boolean ativo;
 
     @Transient
-    private Long idGrupoUsuario;
+    private Integer idGrupoUsuario;
 }

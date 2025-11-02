@@ -13,13 +13,13 @@ public class GrupoUsuarioFuncionario {
     @EmbeddedId
     private GrupoUsuarioFuncionarioId id;
 
-    @MapsId("idFuncionario")
     @ManyToOne
+    @MapsId("idFuncionario")
     @JoinColumn(name = "idFuncionario")
     private Funcionario funcionario;
 
-    @MapsId("idGrupoUsuario")
     @ManyToOne
+    @MapsId("idGrupoUsuario")
     @JoinColumn(name = "idGrupoUsuario")
     private GrupoUsuario grupoUsuario;
 }

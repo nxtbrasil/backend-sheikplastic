@@ -11,7 +11,13 @@ import lombok.NoArgsConstructor;
 public class GrupoUsuarioRegra {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private Integer idGrupoUsuario;
-    private Integer idRegra;
+    private Integer id; // se não tiver na tabela, cria artificialmente
+
+    @ManyToOne
+    @JoinColumn(name = "idGrupoUsuario")
+    private GrupoUsuario grupoUsuario;
+
+    @ManyToOne
+    @JoinColumn(name = "idRegra")
+    private Regra regra;
 }

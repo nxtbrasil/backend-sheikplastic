@@ -18,7 +18,7 @@ public class GrupoUsuarioService {
         return grupoUsuarioRepository.findAll();
     }
 
-    public GrupoUsuario buscarPorId(Long id) {
+    public GrupoUsuario buscarPorId(Integer id) {
         return grupoUsuarioRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Grupo de usuário não encontrado"));
     }
@@ -27,13 +27,13 @@ public class GrupoUsuarioService {
         return grupoUsuarioRepository.save(grupoUsuario);
     }
 
-    public GrupoUsuario atualizar(Long id, GrupoUsuario grupoUsuarioAtualizado) {
+    public GrupoUsuario atualizar(Integer id, GrupoUsuario grupoUsuarioAtualizado) {
         GrupoUsuario grupo = buscarPorId(id);
         grupo.setNomeGrupoUsuario(grupoUsuarioAtualizado.getNomeGrupoUsuario());
         return grupoUsuarioRepository.save(grupo);
     }
 
-    public void deletar(Long id) {
+    public void deletar(Integer id) {
         grupoUsuarioRepository.deleteById(id);
     }
 }
