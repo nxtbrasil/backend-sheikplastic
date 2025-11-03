@@ -94,4 +94,34 @@ public class GrupoUsuarioController {
         regraService.deletar(id);
         return ResponseEntity.noContent().build();
     }
+
+    // ✅ VINCULAR uma regra ao grupo
+    @PostMapping("/{idGrupo}/regras/{idRegra}")
+    public ResponseEntity<String> vincularRegraAoGrupo(
+            @PathVariable Integer idGrupo,
+            @PathVariable Long idRegra) {
+
+        try {
+            grupoUsuarioRegraService.vincularRegraAoGrupo(idGrupo, idRegra);
+            return ResponseEntity.ok("Regra vinculada com sucesso ao grupo.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Erro ao vincular regra: " + e.getMessage());
+        }
+    }
+
+    // ✅ DESVINCULAR uma regra do grupo
+    @DeleteMapping("/{idGrupo}/regras/{idRegra}")
+    public ResponseEntity<String> desvincularRegraDoGrupo(
+            @PathVariable Integer idGrupo,
+            @PathVariable Long idRegra) {
+
+        try {
+            grupoUsuarioRegraService.desvincularRegraDoGrupo(idGrupo, idRegra);
+            return ResponseEntity.ok("Regra removida do grupo com sucesso.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Erro ao remover regra: " + e.getMessage());
+        }
+    }
 }

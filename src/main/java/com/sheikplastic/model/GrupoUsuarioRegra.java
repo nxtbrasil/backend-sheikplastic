@@ -9,15 +9,17 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class GrupoUsuarioRegra {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id; // se não tiver na tabela, cria artificialmente
+
+    @EmbeddedId
+    private GrupoUsuarioRegraId id = new GrupoUsuarioRegraId();
 
     @ManyToOne
+    @MapsId("idGrupoUsuario")
     @JoinColumn(name = "idGrupoUsuario")
     private GrupoUsuario grupoUsuario;
 
     @ManyToOne
+    @MapsId("idRegra")
     @JoinColumn(name = "idRegra")
     private Regra regra;
 }

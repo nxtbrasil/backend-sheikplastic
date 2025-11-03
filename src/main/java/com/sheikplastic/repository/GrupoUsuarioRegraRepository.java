@@ -9,8 +9,15 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface GrupoUsuarioRegraRepository extends JpaRepository<GrupoUsuarioRegra, Integer> {
+
     @Query("SELECT gur.regra FROM GrupoUsuarioRegra gur WHERE gur.grupoUsuario.idGrupoUsuario = :idGrupo")
     List<Regra> findRegrasByGrupo(Integer idGrupo);
-       @Query("SELECT h.grupoPai.idGrupoUsuario FROM GrupoUsuarioHeranca h WHERE h.grupoFilho.idGrupoUsuario = :idFilho")
+
+    @Query("SELECT h.grupoPai.idGrupoUsuario FROM GrupoUsuarioHeranca h WHERE h.grupoFilho.idGrupoUsuario = :idFilho")
     List<Integer> findGruposPai(Integer idFilho);
+
+    boolean existsByIdIdGrupoUsuarioAndIdIdRegra(Integer idGrupoUsuario, Long idRegra);
+    void deleteByIdIdGrupoUsuarioAndIdIdRegra(Integer idGrupoUsuario, Long idRegra);
+
+    
 }

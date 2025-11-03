@@ -27,21 +27,23 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .cors().and() // ✅ Habilita CORS
-            .csrf().disable()
-            .authorizeHttpRequests(auth -> auth
-                    .requestMatchers(
-                            "/api/auth/**",
+                .cors().and() // ✅ Habilita CORS
+                .csrf().disable()
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(
+                        "/api/auth/**",
                             "/menu/**",
                             "/v3/api-docs/**",
                             "/swagger-ui/**",
                             "/swagger-ui.html",
-                            "/api/grupos-usuario/**",
-                            "/api/grupos-usuario/**/regras"
-                    ).permitAll()
-                    .anyRequest().authenticated()
-            )
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+                            "/api/funcionarios/**",
+                            "/api/grupos-usuario/**", // cobre também /regras
+                            "/api/menu/**",
+                            "/api/funcoes"
+
+                        ).permitAll()
+                        .anyRequest().authenticated())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
