@@ -1,19 +1,22 @@
 package com.sheikplastic.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.Objects;
 
 @Embeddable
 public class GrupoUsuarioHerancaId implements Serializable {
 
-    @Column(name = "idGrupoPai")
     private Integer idGrupoPai;
-
-    @Column(name = "idGrupoFilho")
     private Integer idGrupoFilho;
 
-    // Getters e setters
+    public GrupoUsuarioHerancaId() {}
+
+    public GrupoUsuarioHerancaId(Integer idGrupoPai, Integer idGrupoFilho) {
+        this.idGrupoPai = idGrupoPai;
+        this.idGrupoFilho = idGrupoFilho;
+    }
+
     public Integer getIdGrupoPai() {
         return idGrupoPai;
     }

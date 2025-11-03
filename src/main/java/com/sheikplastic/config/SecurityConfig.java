@@ -39,7 +39,8 @@ public class SecurityConfig {
                             "/api/funcionarios/**",
                             "/api/grupos-usuario/**", // cobre também /regras
                             "/api/menu/**",
-                            "/api/funcoes"
+                            "/api/funcoes",
+                            "/api/grupos"
 
                         ).permitAll()
                         .anyRequest().authenticated())

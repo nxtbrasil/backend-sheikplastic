@@ -9,15 +9,29 @@ public class GrupoUsuarioHeranca {
     @EmbeddedId
     private GrupoUsuarioHerancaId id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("idGrupoPai") // vincula com o campo do ID composto
-    @JoinColumn(name = "idGrupoPai", referencedColumnName = "idGrupoUsuario")
+    @ManyToOne
+    @MapsId("idGrupoPai")
+    @JoinColumn(name = "idGrupoPai")
     private GrupoUsuario grupoPai;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("idGrupoFilho") // vincula com o campo do ID composto
-    @JoinColumn(name = "idGrupoFilho", referencedColumnName = "idGrupoUsuario")
+    @ManyToOne
+    @MapsId("idGrupoFilho")
+    @JoinColumn(name = "idGrupoFilho")
     private GrupoUsuario grupoFilho;
+
+    public GrupoUsuarioHeranca() {}
+
+    // 🔹 Construtor usado quando você já tem os objetos de grupo
+    public GrupoUsuarioHeranca(GrupoUsuario grupoPai, GrupoUsuario grupoFilho) {
+        this.grupoPai = grupoPai;
+        this.grupoFilho = grupoFilho;
+        this.id = new GrupoUsuarioHerancaId(grupoPai.getIdGrupoUsuario(), grupoFilho.getIdGrupoUsuario());
+    }
+
+    // 🔹 Construtor adicional para aceitar diretamente o ID composto
+    public GrupoUsuarioHeranca(GrupoUsuarioHerancaId id) {
+        this.id = id;
+    }
 
     public GrupoUsuarioHerancaId getId() {
         return id;
