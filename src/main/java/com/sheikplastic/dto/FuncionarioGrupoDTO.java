@@ -9,4 +9,6 @@ public class FuncionarioGrupoDTO {
     private String emailFuncionario;
     private boolean vinculado;
     private String nomeGrupo;
+        private Long qtdVinculos; // 👈 novo campo
+
 }

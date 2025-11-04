@@ -5,8 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*; // já inclui RequestBody correto
+import org.springframework.web.bind.annotation.*;
 
+import com.sheikplastic.dto.FuncionarioGrupoDTO;
 import com.sheikplastic.model.GrupoUsuario;
 import com.sheikplastic.model.Regra;
 import com.sheikplastic.service.GrupoUsuarioRegraService;
@@ -26,39 +27,48 @@ public class GrupoUsuarioController {
     @Autowired
     private RegraService regraService;
 
+    // ✅ Listar todos os grupos
     @GetMapping
     public List<GrupoUsuario> listar() {
         return grupoUsuarioService.listarTodos();
     }
 
+    // ✅ Buscar grupo por ID
     @GetMapping("/{id}")
     public ResponseEntity<GrupoUsuario> buscarPorId(@PathVariable Integer id) {
         GrupoUsuario grupo = grupoUsuarioService.buscarPorId(id);
         return ResponseEntity.ok(grupo);
     }
 
+    // ✅ Criar novo grupo
     @PostMapping
     public ResponseEntity<GrupoUsuario> criar(@RequestBody GrupoUsuario grupoUsuario) {
         GrupoUsuario novoGrupo = grupoUsuarioService.salvar(grupoUsuario);
         return ResponseEntity.status(HttpStatus.CREATED).body(novoGrupo);
     }
 
+    // ✅ Atualizar grupo
     @PutMapping("/{id}")
     public ResponseEntity<GrupoUsuario> atualizar(@PathVariable Integer id, @RequestBody GrupoUsuario grupoUsuario) {
         GrupoUsuario atualizado = grupoUsuarioService.atualizar(id, grupoUsuario);
         return ResponseEntity.ok(atualizado);
     }
 
+    // ✅ Deletar grupo
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletar(@PathVariable Integer id) {
         grupoUsuarioService.deletar(id);
         return ResponseEntity.noContent().build();
     }
 
-    /**
-     * Retorna todas as regras diretas e herdadas de um grupo.
-     * Exemplo: GET /api/grupos-usuario/1/regras
-     */
+    // ✅ Listar funcionários vinculados e não vinculados a um grupo
+    @GetMapping("/{idGrupoUsuario}/funcionarios")
+    public ResponseEntity<List<FuncionarioGrupoDTO>> listarFuncionariosPorGrupo(@PathVariable Integer idGrupoUsuario) {
+        List<FuncionarioGrupoDTO> funcionarios = grupoUsuarioService.listarFuncionariosPorGrupo(idGrupoUsuario);
+        return ResponseEntity.ok(funcionarios);
+    }
+
+    // ✅ Retorna todas as regras diretas e herdadas de um grupo
     @GetMapping("/{id}/regras")
     public List<Regra> listarRegras(@PathVariable Integer id) {
         return grupoUsuarioRegraService.listarRegrasComHeranca(id);
@@ -90,12 +100,12 @@ public class GrupoUsuarioController {
     }
 
     @DeleteMapping("/regras/{id}")
-    public ResponseEntity<Void> deletarResgra(@PathVariable Long id) {
+    public ResponseEntity<Void> deletarRegra(@PathVariable Long id) {
         regraService.deletar(id);
         return ResponseEntity.noContent().build();
     }
 
-    // ✅ VINCULAR uma regra ao grupo
+    // ✅ Vincular regra ao grupo
     @PostMapping("/{idGrupo}/regras/{idRegra}")
     public ResponseEntity<String> vincularRegraAoGrupo(
             @PathVariable Integer idGrupo,
@@ -110,7 +120,7 @@ public class GrupoUsuarioController {
         }
     }
 
-    // ✅ DESVINCULAR uma regra do grupo
+    // ✅ Desvincular regra do grupo
     @DeleteMapping("/{idGrupo}/regras/{idRegra}")
     public ResponseEntity<String> desvincularRegraDoGrupo(
             @PathVariable Integer idGrupo,

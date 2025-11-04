@@ -12,4 +12,7 @@ public interface GrupoUsuarioFuncionarioRepository extends JpaRepository<GrupoUs
     List<GrupoUsuarioFuncionario> findByFuncionario_IdFuncionario(Long idFuncionario);
 List<GrupoUsuarioFuncionario> findById_IdFuncionario(Long idFuncionario);
         void deleteById_IdFuncionario(Long idFuncionario);
+
+            long countById_IdFuncionarioAndId_IdGrupoUsuario(Long idFuncionario, Integer idGrupoUsuario);
+
 }
