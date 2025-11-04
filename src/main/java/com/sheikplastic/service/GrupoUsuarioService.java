@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.sheikplastic.dto.FuncionarioGrupoDTO;
 import com.sheikplastic.model.Funcionario;
 import com.sheikplastic.model.GrupoUsuario;
+import com.sheikplastic.model.GrupoUsuarioFuncionario;
+import com.sheikplastic.model.GrupoUsuarioFuncionarioId;
 import com.sheikplastic.repository.FuncionarioRepository;
 import com.sheikplastic.repository.GrupoUsuarioFuncionarioRepository;
 import com.sheikplastic.repository.GrupoUsuarioRepository;
@@ -23,7 +25,7 @@ public class GrupoUsuarioService {
     private GrupoUsuarioRepository grupoUsuarioRepository;
 
     @Autowired
-    private FuncionarioRepository funcionarioRepository; 
+    private FuncionarioRepository funcionarioRepository;
 
     @Autowired
     private GrupoUsuarioFuncionarioRepository grupoUsuarioFuncionarioRepository;
@@ -52,24 +54,54 @@ public class GrupoUsuarioService {
     }
 
     public List<FuncionarioGrupoDTO> listarFuncionariosPorGrupo(Integer idGrupoUsuario) {
-    List<Funcionario> funcionarios = funcionarioRepository.findAll();
-    List<FuncionarioGrupoDTO> resultado = new ArrayList<>();
+        List<Funcionario> funcionarios = funcionarioRepository.findAll();
+        List<FuncionarioGrupoDTO> resultado = new ArrayList<>();
 
-    for (Funcionario f : funcionarios) {
-        // Conta quantos vínculos esse funcionário tem com o grupo especificado
-        long qtdVinculos = grupoUsuarioFuncionarioRepository
-                .countById_IdFuncionarioAndId_IdGrupoUsuario(f.getIdFuncionario(), idGrupoUsuario);
+        for (Funcionario f : funcionarios) {
+            // Conta quantos vínculos esse funcionário tem com o grupo especificado
+            long qtdVinculos = grupoUsuarioFuncionarioRepository
+                    .countById_IdFuncionarioAndId_IdGrupoUsuario(f.getIdFuncionario(), idGrupoUsuario);
 
-        FuncionarioGrupoDTO dto = new FuncionarioGrupoDTO();
-        dto.setIdFuncionario(f.getIdFuncionario());
-        dto.setNomeFuncionario(f.getNomeFuncionario());
-        dto.setEmailFuncionario(f.getEmailFuncionario());
-        dto.setQtdVinculos(qtdVinculos); // adiciona o campo da query
-        dto.setVinculado(qtdVinculos > 0);
+            FuncionarioGrupoDTO dto = new FuncionarioGrupoDTO();
+            dto.setIdFuncionario(f.getIdFuncionario());
+            dto.setNomeFuncionario(f.getNomeFuncionario());
+            dto.setEmailFuncionario(f.getEmailFuncionario());
+            dto.setQtdVinculos(qtdVinculos); // adiciona o campo da query
+            dto.setVinculado(qtdVinculos > 0);
 
-        resultado.add(dto);
+            resultado.add(dto);
+        }
+
+        return resultado;
     }
 
-    return resultado;
-}
+    @Transactional
+    public void vincularFuncionarioAoGrupo(Integer idGrupoUsuario, Long idFuncionario) {
+        var grupo = grupoUsuarioRepository.findById(idGrupoUsuario)
+                .orElseThrow(() -> new RuntimeException("Grupo não encontrado"));
+        var funcionario = funcionarioRepository.findById(idFuncionario)
+                .orElseThrow(() -> new RuntimeException("Funcionário não encontrado"));
+
+        // Cria a chave composta
+        GrupoUsuarioFuncionarioId id = new GrupoUsuarioFuncionarioId();
+        id.setIdGrupoUsuario(idGrupoUsuario);
+        id.setIdFuncionario(idFuncionario);
+
+        // Cria a entidade de vínculo
+        GrupoUsuarioFuncionario vinculo = new GrupoUsuarioFuncionario();
+        vinculo.setId(id);
+        vinculo.setGrupoUsuario(grupo);
+        vinculo.setFuncionario(funcionario);
+
+        grupoUsuarioFuncionarioRepository.save(vinculo);
+    }
+
+    @Transactional
+    public void desvincularFuncionarioDoGrupo(Integer idGrupoUsuario, Long idFuncionario) {
+        GrupoUsuarioFuncionarioId id = new GrupoUsuarioFuncionarioId();
+        id.setIdGrupoUsuario(idGrupoUsuario);
+        id.setIdFuncionario(idFuncionario);
+
+        grupoUsuarioFuncionarioRepository.deleteById(id);
+    }
 }

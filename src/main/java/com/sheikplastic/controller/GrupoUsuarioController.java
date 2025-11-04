@@ -134,4 +134,35 @@ public class GrupoUsuarioController {
                     .body("Erro ao remover regra: " + e.getMessage());
         }
     }
+
+    // ✅ VINCULAR funcionário ao grupo
+    @PostMapping("/{idGrupo}/funcionarios/{idFuncionario}")
+    public ResponseEntity<String> vincularFuncionarioAoGrupo(
+            @PathVariable Integer idGrupo,
+            @PathVariable Long idFuncionario) {
+
+        try {
+            grupoUsuarioService.vincularFuncionarioAoGrupo(idGrupo, idFuncionario);
+            return ResponseEntity.ok("Funcionário vinculado com sucesso ao grupo.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Erro ao vincular funcionário: " + e.getMessage());
+        }
+    }
+
+    // ✅ DESVINCULAR funcionário do grupo
+    @DeleteMapping("/{idGrupo}/funcionarios/{idFuncionario}")
+    public ResponseEntity<String> desvincularFuncionarioDoGrupo(
+            @PathVariable Integer idGrupo,
+            @PathVariable Long idFuncionario) {
+
+        try {
+            grupoUsuarioService.desvincularFuncionarioDoGrupo(idGrupo, idFuncionario);
+            return ResponseEntity.ok("Funcionário removido do grupo com sucesso.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Erro ao remover funcionário: " + e.getMessage());
+        }
+    }
+
 }
