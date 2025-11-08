@@ -40,8 +40,8 @@ public class SecurityConfig {
                             "/api/grupos-usuario/**", // cobre também /regras
                             "/api/menu/**",
                             "/api/funcoes",
-                            "/api/grupos"
-
+                            "/api/grupos",
+                            "/api/cidades/**"
                         ).permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
