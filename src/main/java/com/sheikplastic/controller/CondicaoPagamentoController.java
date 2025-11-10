@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,11 +48,17 @@ public class CondicaoPagamentoController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> excluir(@PathVariable Integer id) {
+    public ResponseEntity<?> excluir(@PathVariable Integer id) {
         return repository.findById(id)
                 .map(condicao -> {
-                    repository.delete(condicao);
-                    return ResponseEntity.ok().<Void>build();
+                    try {
+                        repository.delete(condicao);
+                        return ResponseEntity.ok().build();
+                    } catch (org.springframework.dao.DataIntegrityViolationException e) {
+                        return ResponseEntity
+                                .status(HttpStatus.CONFLICT)
+                                .body("Não é possível excluir: existem registros vinculados a esta condição de pagamento.");
+                    }
                 })
                 .orElse(ResponseEntity.notFound().build());
     }
