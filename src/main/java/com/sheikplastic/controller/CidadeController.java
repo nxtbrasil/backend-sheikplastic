@@ -21,7 +21,7 @@ public class CidadeController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Cidade> buscarPorId(@PathVariable Integer id) {
+    public ResponseEntity<Cidade> buscarPorId(@PathVariable Long id) {
         return cidadeService.buscarPorId(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -33,7 +33,7 @@ public class CidadeController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Cidade> atualizar(@PathVariable Integer id, @RequestBody Cidade cidade) {
+    public ResponseEntity<Cidade> atualizar(@PathVariable Long id, @RequestBody Cidade cidade) {
         try {
             return ResponseEntity.ok(cidadeService.atualizar(id, cidade));
         } catch (RuntimeException e) {
@@ -42,7 +42,7 @@ public class CidadeController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Integer id) {
+    public ResponseEntity<Void> deletar(@PathVariable Long id) {
         cidadeService.deletar(id);
         return ResponseEntity.noContent().build();
     }

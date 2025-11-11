@@ -42,7 +42,8 @@ public class SecurityConfig {
                             "/api/funcoes",
                             "/api/grupos",
                             "/api/cidades/**",
-                            "/api/condicoes-pagamento/**"
+                            "/api/condicoes-pagamento/**",
+                            "/api/estados/**"
                         ).permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));

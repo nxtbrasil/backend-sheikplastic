@@ -8,20 +8,21 @@ public class Cidade {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idCidade;
+    private Long idCidade;
 
-    @Column(nullable = false, length = 100)
+    @Column(length = 60, nullable = false)
     private String nomeCidade;
 
-    @Column(nullable = false)
-    private Integer idEstado; // pode ser FK se tiver entidade Estado
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "idEstado", nullable = false)
+    private Estado estado;
 
     // Getters e Setters
-    public Integer getIdCidade() {
+    public Long getIdCidade() {
         return idCidade;
     }
 
-    public void setIdCidade(Integer idCidade) {
+    public void setIdCidade(Long idCidade) {
         this.idCidade = idCidade;
     }
 
@@ -33,11 +34,11 @@ public class Cidade {
         this.nomeCidade = nomeCidade;
     }
 
-    public Integer getIdEstado() {
-        return idEstado;
+    public Estado getEstado() {
+        return estado;
     }
 
-    public void setIdEstado(Integer idEstado) {
-        this.idEstado = idEstado;
+    public void setEstado(Estado estado) {
+        this.estado = estado;
     }
 }

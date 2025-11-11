@@ -18,7 +18,7 @@ public class CidadeService {
         return cidadeRepository.findAll();
     }
 
-    public Optional<Cidade> buscarPorId(Integer id) {
+    public Optional<Cidade> buscarPorId(Long id) {
         return cidadeRepository.findById(id);
     }
 
@@ -26,15 +26,17 @@ public class CidadeService {
         return cidadeRepository.save(cidade);
     }
 
-    public Cidade atualizar(Integer id, Cidade cidadeAtualizada) {
-        return cidadeRepository.findById(id).map(cidade -> {
-            cidade.setNomeCidade(cidadeAtualizada.getNomeCidade());
-            cidade.setIdEstado(cidadeAtualizada.getIdEstado());
-            return cidadeRepository.save(cidade);
-        }).orElseThrow(() -> new RuntimeException("Cidade não encontrada"));
+    public Cidade atualizar(Long id, Cidade cidadeAtualizada) {
+        return cidadeRepository.findById(id)
+                .map(cidade -> {
+                    cidade.setNomeCidade(cidadeAtualizada.getNomeCidade());
+                    cidade.setEstado(cidadeAtualizada.getEstado());
+                    return cidadeRepository.save(cidade);
+                })
+                .orElseThrow(() -> new RuntimeException("Cidade não encontrada"));
     }
 
-    public void deletar(Integer id) {
+    public void deletar(Long id) {
         cidadeRepository.deleteById(id);
     }
 }

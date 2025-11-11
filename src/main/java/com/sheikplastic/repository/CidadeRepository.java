@@ -1,9 +1,9 @@
 package com.sheikplastic.repository;
 
+import com.sheikplastic.model.Cidade;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import com.sheikplastic.model.Cidade;
 
 @Repository
-public interface CidadeRepository extends JpaRepository<Cidade, Integer> {
+public interface CidadeRepository extends JpaRepository<Cidade, Long> {
 }
