@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -15,54 +14,56 @@ import java.util.stream.Collectors;
 public class MenuService {
 
     private final MenuRepository menuRepository;
-    private final RegraService regraService;
 
     /**
-     * Retorna o menu completo (hierárquico) do funcionário,
-     * filtrando conforme suas regras de acesso.
+     * Retorna TODO o menu hierárquico visível
+     * (sem regras, igual ao ASP clássico).
      */
-    public List<MenuDTO> getMenuFuncionario(Long idFuncionario) {
-        Set<String> regrasUsuario = regraService.getRegrasFuncionario(idFuncionario);
+    public List<MenuDTO> getMenu() {
 
-        // Busca apenas menus raiz visíveis
-        List<Menu> menusRaiz = menuRepository.findByMenuSuperiorIsNullAndVisivelTrueOrderByOrdemMenu();
+        // Pega apenas os menus raiz (pai null)
+        List<Menu> menusRaiz =
+                menuRepository.findByMenuSuperiorIsNullAndVisivelTrueOrderByOrdemMenu();
 
         return menusRaiz.stream()
-                .filter(menu -> temAcesso(menu, regrasUsuario))
-                .map(menu -> toDTO(menu, regrasUsuario))
+                .map(this::toDTO)
                 .collect(Collectors.toList());
     }
 
     /**
-     * Verifica se o funcionário tem acesso ao menu atual.
+     * Monta o DTO e seus submenus (recursivo)
      */
-    private boolean temAcesso(Menu menu, Set<String> regrasUsuario) {
-        if (menu.getRegra() != null && menu.getRegra().getChaveRegra() != null) {
-            return regrasUsuario.contains(menu.getRegra().getChaveRegra());
-        }
-
-        // Se o menu não tem regra, verifica se algum submenu é acessível
-        return menu.getSubMenus() != null && menu.getSubMenus().stream()
-                .filter(Menu::getVisivel)
-                .anyMatch(sub -> temAcesso(sub, regrasUsuario));
-    }
-
-    /**
-     * Converte o menu em DTO e aplica recursivamente os submenus acessíveis.
-     */
-    private MenuDTO toDTO(Menu menu, Set<String> regrasUsuario) {
+    private MenuDTO toDTO(Menu menu) {
         MenuDTO dto = new MenuDTO();
+
         dto.setId(menu.getIdMenu());
         dto.setDescricao(menu.getDescricaoMenu());
         dto.setEndereco(menu.getEnderecoPagina());
 
-        List<MenuDTO> subMenus = menu.getSubMenus().stream()
-                .filter(Menu::getVisivel)
-                .filter(sub -> temAcesso(sub, regrasUsuario))
-                .map(sub -> toDTO(sub, regrasUsuario))
-                .collect(Collectors.toList());
+        List<MenuDTO> subMenus =
+                menu.getSubMenus().stream()
+                        .filter(Menu::getVisivel)
+                        .sorted((a, b) -> a.getOrdemMenu().compareTo(b.getOrdemMenu()))
+                        .map(this::toDTO)
+                        .collect(Collectors.toList());
 
         dto.setSubMenus(subMenus);
+
         return dto;
+    }
+
+
+    /**
+     * Retorna o menu hierárquico visível para um funcionário específico
+     * (com base nas suas permissões).
+     */
+    public List<MenuDTO> getMenuFuncionario(Long idFuncionario) {
+        // Pega apenas os menus raiz (pai null)
+        List<Menu> menusRaiz =
+                menuRepository.findByMenuSuperiorIsNullAndVisivelTrueOrderByOrdemMenu();
+
+        return menusRaiz.stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
     }
 }
