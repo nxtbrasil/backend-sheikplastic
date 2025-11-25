@@ -39,4 +39,9 @@ public class CidadeService {
     public void deletar(Long id) {
         cidadeRepository.deleteById(id);
     }
+
+    public List<Cidade> listarPorEstado(Long idEstado) {
+    return cidadeRepository.findByEstado_IdEstado(idEstado);
+}
+
 }

@@ -46,4 +46,9 @@ public class CidadeController {
         cidadeService.deletar(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/estado/{idEstado}")
+    public List<Cidade> buscarPorEstado(@PathVariable Long idEstado) {
+        return cidadeService.listarPorEstado(idEstado);
+    }
 }

@@ -39,14 +39,14 @@ public class SecurityConfig {
                             "/api/funcionarios/**",
                             "/api/grupos-usuario/**", // cobre também /regras
                             "/api/menu/**",
-                            "/api/funcoes",
+                            "/api/funcoes/**",
                             "/api/grupos",
                             "/api/cidades/**",
                             "/api/condicoes-pagamento/**",
                             "/api/estados/**",
                             "/api/produtos/**",
                             "/api/tipos-contato/**",
-                            "/api/pessoas/**"                    
+                            "/api/pessoa/**"                    
                         ).permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));

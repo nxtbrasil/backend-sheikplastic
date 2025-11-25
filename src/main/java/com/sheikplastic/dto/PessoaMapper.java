@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 
+import com.sheikplastic.model.Cidade;
 import com.sheikplastic.model.Pessoa;
 import com.sheikplastic.model.PessoaContato;
 import com.sheikplastic.model.TipoContato;
@@ -54,16 +55,28 @@ public class PessoaMapper {
         pessoa.setId(dto.getId());
         pessoa.setNome(dto.getNome());
         pessoa.setIdentidade(dto.getIdentidade());
+        pessoa.setIdCondicaoPagamento(dto.getIdCondicaoPagamento());
 
         if (dto.getContatos() != null) {
             pessoa.setContatos(
                 dto.getContatos().stream()
                         .map(this::toContatoEntity)
+                        .map(cidade -> {
+                            cidade.setPessoa(pessoa);
+                            return cidade;
+                        })
                         .toList()
             );
         }
 
         return pessoa;
+    }
+
+    public Cidade toCidadeEntity(CidadeDTO dto) {
+        Cidade cidade = new Cidade();
+        cidade.setIdCidade(dto.getIdCidade());
+        cidade.setNomeCidade(dto.getNomeCidade());
+        return cidade;
     }
 
     public PessoaContato toContatoEntity(PessoaContatoDTO dto) {

@@ -29,12 +29,42 @@ public class Pessoa {
     @Column(name = "dtCadastroPessoa")
     private LocalDate dataCadastro;
 
-    @Column(name = "nomePessoa")
+    @Column(name = "nomePessoa", length = 50)
     private String nome;
 
-    @Column(name = "apelidoPessoa")
+    @Column(name = "apelidoPessoa", length = 50)
     private String apelido;
 
+    @Column(name = "cepEnderecoPessoa", length = 8)
+    private String cepPessoaString;
+
+    @Column(name = "logradouroEnderecoPessoa", length = 100)
+    private String logradouroPessoa;
+
+    @Column(name = "numeroEnderecoPessoa", length = 10)
+    private String numeroPessoa;
+
+    @Column(name = "complementoEnderecoPessoa", length = 20)
+    private String complementoPessoa;
+
+    // 🔥 FK Cidade
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "idCidade")
+    private Cidade cidade;
+
+    @Column(name = "bairroEnderecoPessoa", length = 50)
+    private String bairroPessoa;
+
+    @Column(name = "idCondicaoPagamento")
+    private Long idCondicaoPagamento;
+
+    @Column(name = "observacao", length = 50)
+    private String observacao;
+
+    @Column(name = "ativo", length = 1)
+    private Boolean ativo;
+
+    // Relacionamento com contatos
     @OneToMany(mappedBy = "pessoa", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<PessoaContato> contatos = new ArrayList<>();
 }
