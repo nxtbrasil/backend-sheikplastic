@@ -1,5 +1,7 @@
 package com.sheikplastic.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
@@ -21,8 +23,9 @@ public class PessoaContato {
     private PessoaContatoId id;
 
     @ManyToOne
-    @MapsId("idPessoa") // mapeia idPessoa dentro da chave composta
+    @MapsId("idPessoa")
     @JoinColumn(name = "idPessoa")
+    @JsonIgnore
     private Pessoa pessoa;
 
     @ManyToOne

@@ -5,11 +5,14 @@ import com.sheikplastic.model.Pessoa;
 import com.sheikplastic.repository.PessoaRepository;
 import com.sheikplastic.service.PessoaService;
 
+import jakarta.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -43,4 +46,16 @@ public class PessoaController {
     public void deletar(@PathVariable Long id) {
         service.deletar(id);
     }
+
+    @GetMapping("/backup/csv")
+    public void gerarBackupCsv(HttpServletResponse response) throws IOException {
+
+        List<PessoaDTO> pessoas = service.listar();
+
+        response.setContentType("text/csv; charset=UTF-8");
+        response.setHeader("Content-Disposition", "attachment; filename=\"backup_pessoas.csv\"");
+
+        service.gerarCsv(pessoas, response.getWriter());
+    }
+
 }

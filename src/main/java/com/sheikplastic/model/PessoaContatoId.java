@@ -7,6 +7,8 @@ import java.io.Serializable;
 
 @Embeddable
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class PessoaContatoId implements Serializable {
 
     @Column(name = "idPessoa")

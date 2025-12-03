@@ -13,4 +13,5 @@ public interface PessoaContatoRepository
     extends JpaRepository<PessoaContato, PessoaContatoId> {
 
     List<PessoaContato> findByPessoa_IdOrderById_SeqContato(Long idPessoa);
+    
 }

@@ -16,6 +16,8 @@ import com.sheikplastic.repository.TipoContatoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.io.Writer;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -194,7 +196,7 @@ public class PessoaService {
         p.setDataCadastro(LocalDate.now()); // evita NULL
         p.setBairroPessoa(dto.getBairroPessoa());
         p.setObservacao(dto.getObservacao());
-    
+
         // ------- BUSCAR CIDADE --------
         if (dto.getIdCidade() != null) {
             Cidade cidade = cidadeService.buscarPorId(dto.getIdCidade())
@@ -225,6 +227,29 @@ public class PessoaService {
         }
 
         return p;
+    }
+
+    public void gerarCsv(List<PessoaDTO> pessoas, Writer writer) throws IOException {
+
+        writer.write("id;nome;apelido;documento;identidade;logradouro;numero;bairro;cidade;estado\n");
+
+        for (PessoaDTO p : pessoas) {
+            writer.write(
+                    safe(p.getNome()) + ";" +
+                            safe(p.getApelido()) + ";" +
+                            safe(p.getDocumento()) + ";" +
+                            safe(p.getIdentidade()) + ";" +
+                            safe(p.getLogradouroPessoa()) + ";" +
+                            safe(p.getNumeroPessoa()) + ";" +
+                            safe(p.getBairroPessoa()) + ";" +
+                            safe(p.getCidade().getNomeCidade()) + ";" +
+                            safe(p.getCidade().getNomeEstado()) +
+                            "\n");
+        }
+    }
+
+    private String safe(String v) {
+        return v != null ? v.replace(";", ",") : "";
     }
 
 }
