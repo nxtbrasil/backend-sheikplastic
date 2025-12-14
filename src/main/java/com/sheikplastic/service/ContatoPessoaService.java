@@ -1,8 +1,11 @@
 package com.sheikplastic.service;
 
+import com.sheikplastic.model.Pessoa;
 import com.sheikplastic.model.PessoaContato;
 import com.sheikplastic.model.PessoaContatoId;
 import com.sheikplastic.repository.PessoaContatoRepository;
+import com.sheikplastic.repository.PessoaRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +17,9 @@ public class ContatoPessoaService {
 
     @Autowired
     private PessoaContatoRepository pessoaContatoRepository;
+
+    @Autowired
+    private PessoaRepository pessoaRepository;
 
     /**
      * Lista contatos por pessoa
@@ -32,21 +38,41 @@ public class ContatoPessoaService {
     /**
      * Criar novo contato
      */
-    public PessoaContato salvar(PessoaContato contato) {
-        return pessoaContatoRepository.save(contato);
-    }
+public PessoaContato salvar(PessoaContato contato) {
+
+    Pessoa pessoa = pessoaRepository
+        .findById(contato.getId().getIdPessoa())
+        .orElseThrow(() -> new RuntimeException("Pessoa não encontrada"));
+
+    contato.setPessoa(pessoa);
+
+    return pessoaContatoRepository.save(contato);
+}
 
     /**
      * Atualizar contato
      */
-    public PessoaContato atualizarContato(PessoaContato contato) {
-        return pessoaContatoRepository.save(contato);
-    }
+public PessoaContato atualizarContato(PessoaContato contato) {
+
+    // Recupera a Pessoa pelo id
+    Pessoa pessoa = pessoaRepository
+            .findById(contato.getId().getIdPessoa())
+            .orElseThrow(() -> new RuntimeException("Pessoa não encontrada"));
+
+    // Preenche a propriedade obrigatória
+    contato.setPessoa(pessoa);
+
+    return pessoaContatoRepository.save(contato);
+}
 
     /**
      * Deletar contato
      */
-    public void deletarContato(PessoaContatoId id) {
-        pessoaContatoRepository.deleteById(id);
-    }
+        public void deletarContato(PessoaContatoId id) {
+            PessoaContato contato = pessoaContatoRepository
+                .findById(id)
+                .orElseThrow(() -> new RuntimeException("Contato não encontrado"));
+
+            pessoaContatoRepository.delete(contato);
+        }
 }

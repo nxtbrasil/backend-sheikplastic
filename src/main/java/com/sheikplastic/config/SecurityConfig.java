@@ -47,7 +47,8 @@ public class SecurityConfig {
                             "/api/produtos/**",
                             "/api/tipos-contato/**",
                             "/api/pessoa/**",
-                            "/api/pessoa-contato/**"                    
+                            "/api/pessoa-contato/**",
+                            "/api/pessoas-produtos/**"                
                         ).permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
