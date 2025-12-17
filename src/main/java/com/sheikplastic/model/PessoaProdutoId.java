@@ -1,31 +1,21 @@
 package com.sheikplastic.model;
 
+import lombok.Data;
 import java.io.Serializable;
-import java.util.Objects;
 
+// Deve implementar Serializable
+@Data 
 public class PessoaProdutoId implements Serializable {
 
+    // Deve ter um construtor sem argumentos (Lombok @NoArgsConstructor)
+    
+    // Campo 1: Corresponde a @Id idPessoa na entidade
     private Long idPessoa;
+    
+    // Campo 2: Corresponde a @Id seqProduto na entidade
     private Long seqProduto;
-
-    public PessoaProdutoId() {}
-
-    public PessoaProdutoId(Long idPessoa, Long seqProduto) {
-        this.idPessoa = idPessoa;
-        this.seqProduto = seqProduto;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof PessoaProdutoId)) return false;
-        PessoaProdutoId that = (PessoaProdutoId) o;
-        return Objects.equals(idPessoa, that.idPessoa) &&
-               Objects.equals(seqProduto, that.seqProduto);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(idPessoa, seqProduto);
-    }
+    
+    
+    // O Lombok @Data gera automaticamente os métodos equals() e hashCode() 
+    // que são necessários para chaves compostas.
 }

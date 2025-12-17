@@ -2,21 +2,14 @@ package com.sheikplastic.dto;
 
 import java.math.BigDecimal;
 
-public interface PessoaProdutoDTO {
-
+public interface PessoaProdutoProjection {
+    
+    // Nomes dos métodos DEVE ser os mesmos dos aliases da query (AS seqProduto, AS nomeProduto, etc.)
     Long getSeqProduto();
-
     String getNomeProduto();
-
     String getComplementoProduto();
-
     String getUnpProduto();
-
     String getUnvProduto();
-
-    BigDecimal getValorVenda();
-
+    BigDecimal getValorVenda(); 
     Long getQtdItens();
-
-    Long getIdProduto();
 }

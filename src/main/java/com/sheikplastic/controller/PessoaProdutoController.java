@@ -1,10 +1,12 @@
 package com.sheikplastic.controller;
 
+import com.sheikplastic.dto.HistoricoPrecoDTO;
+import com.sheikplastic.dto.PessoaProdutoDTO;
+import com.sheikplastic.dto.PessoaProdutoRequest;
+import com.sheikplastic.service.HistoricoPrecoService;
+import com.sheikplastic.service.PessoaProdutoService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import com.sheikplastic.model.PessoaProduto;
-import com.sheikplastic.service.PessoaProdutoService;
 
 import java.util.List;
 
@@ -13,53 +15,63 @@ import java.util.List;
 public class PessoaProdutoController {
 
     private final PessoaProdutoService service;
+    private final HistoricoPrecoService historicoService;
 
-    public PessoaProdutoController(PessoaProdutoService service) {
+    public PessoaProdutoController(
+            PessoaProdutoService service,
+            HistoricoPrecoService historicoService) {
         this.service = service;
+        this.historicoService = historicoService;
     }
 
-    /* ✅ LISTAR */
     @GetMapping
-    public List<PessoaProduto> listar(@PathVariable Long idPessoa) {
-        return service.listarPorPessoa(idPessoa);
+    public List<PessoaProdutoDTO> listar(@PathVariable Long idPessoa) {
+        return service.listarProdutos(idPessoa);
     }
 
-    /* ✅ BUSCAR */
-    @GetMapping("/{seqProduto}")
-    public PessoaProduto buscar(
-            @PathVariable Long idPessoa,
-            @PathVariable Long seqProduto) {
-        return service.buscar(idPessoa, seqProduto);
+    @GetMapping("/{seqProduto}/historico")
+    public List<HistoricoPrecoDTO> buscarHistorico(
+        @PathVariable Long idPessoa,
+        @PathVariable Long seqProduto
+    ) {
+        return historicoService.buscarHistorico(idPessoa, seqProduto);
     }
 
-    /* ✅ CRIAR */
+    // INSERT + UPDATE
     @PostMapping
-    public PessoaProduto criar(
-            @PathVariable Long idPessoa,
-            @RequestBody PessoaProduto produto) {
-        produto.setIdPessoa(idPessoa);
-        return service.criar(produto);
+    public ResponseEntity<Void> salvar(@RequestBody PessoaProdutoRequest req) {
+
+        service.salvarProduto(
+            req.getIdPessoa(),
+            req.getSeqProduto(),
+            req.getIdProduto(),
+            req.getComplementoProduto(),
+            req.getUnpProduto(),
+            req.getUnvProduto(),
+            req.getValorVenda(),
+            req.getValorVendaAnterior()
+        );
+
+        return ResponseEntity.ok().build();
     }
 
-    /* ✅ ATUALIZAR */
-    @PutMapping("/{seqProduto}")
-    public PessoaProduto atualizar(
-            @PathVariable Long idPessoa,
-            @PathVariable Long seqProduto,
-            @RequestBody PessoaProduto produto) {
-
-        produto.setIdPessoa(idPessoa);
-        produto.setSeqProduto(seqProduto);
-        return service.atualizar(produto);
-    }
-
-    /* ✅ DELETAR */
+    // DELETE
     @DeleteMapping("/{seqProduto}")
     public ResponseEntity<Void> deletar(
-            @PathVariable Long idPessoa,
-            @PathVariable Long seqProduto) {
-
-        service.deletar(idPessoa, seqProduto);
+        @PathVariable Long idPessoa,
+        @PathVariable Long seqProduto
+    ) {
+        service.deletarProduto(idPessoa, seqProduto);
         return ResponseEntity.noContent().build();
+    }
+
+      @GetMapping("/{seqProduto}")
+    public ResponseEntity<PessoaProdutoDTO> buscarDetalhe(
+        @PathVariable Long idPessoa,
+        @PathVariable Long seqProduto
+    ) {
+        return ResponseEntity.ok(
+            service.buscarDetalheProduto(idPessoa, seqProduto)
+        );
     }
 }

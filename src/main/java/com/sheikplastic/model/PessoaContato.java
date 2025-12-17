@@ -22,6 +22,7 @@ public class PessoaContato {
     @EmbeddedId
     private PessoaContatoId id;
 
+
     @ManyToOne
     @MapsId("idPessoa")
     @JoinColumn(name = "idPessoa")
