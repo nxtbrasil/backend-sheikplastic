@@ -48,7 +48,10 @@ public class SecurityConfig {
                             "/api/tipos-contato/**",
                             "/api/pessoa/**",
                             "/api/pessoa-contato/**",
-                            "/api/pessoas-produtos/**"                
+                            "/api/pessoas-produtos/**",
+                            "/api/pedidos",      // Sem a barra (para o GET base)
+                             "/api/pedidos/**",   // Com a barra (para ID e sub-rotas)    
+                             "/api/transportadoras/**"               
                         ).permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));

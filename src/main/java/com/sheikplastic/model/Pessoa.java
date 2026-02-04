@@ -52,6 +52,11 @@ public class Pessoa {
     @JoinColumn(name = "idCidade")
     private Cidade cidade;
 
+    // 🔥 FK Transportadora (ADICIONADO)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "idTransportadora")
+    private Transportadora transportadora;
+
     @Column(name = "bairroEnderecoPessoa", length = 50)
     private String bairroPessoa;
 

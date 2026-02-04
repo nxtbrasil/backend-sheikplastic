@@ -27,6 +27,7 @@ public class PessoaDTO {
     private String bairroPessoa;
     private Boolean ativo;
     private String observacao;
+      private Integer idTransportadora;// Para devolver os dados da transportadora ao listar
 
     private List<PessoaContatoDTO> contatos = new ArrayList<>();
     private CidadeDTO cidade; // opcional, popula se quiser enviar os dados completos da cidade

@@ -8,10 +8,12 @@ import com.sheikplastic.model.Cidade;
 import com.sheikplastic.model.Pessoa;
 import com.sheikplastic.model.PessoaContato;
 import com.sheikplastic.model.TipoContato;
+import com.sheikplastic.model.Transportadora;
 import com.sheikplastic.repository.CidadeRepository;
 import com.sheikplastic.repository.PessoaContatoRepository;
 import com.sheikplastic.repository.PessoaRepository;
 import com.sheikplastic.repository.TipoContatoRepository;
+import com.sheikplastic.repository.TransportadoraRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,6 +37,9 @@ public class PessoaService {
 
     @Autowired
     private CidadeService cidadeService;
+
+    @Autowired
+    private TransportadoraRepository transportadoraRepository;
 
     // LISTAR
     public List<PessoaDTO> listar() {
@@ -71,6 +76,15 @@ public class PessoaService {
 
         Pessoa pessoa = pessoaRepository.findByIdWithContatos(id)
                 .orElseThrow(() -> new RuntimeException("Pessoa não encontrada"));
+
+        // -------- ATUALIZAR TRANSPORTADORA (NOVO) --------
+        if (dto.getIdTransportadora() != null) {
+            Transportadora transportadora = transportadoraRepository.findById(dto.getIdTransportadora())
+                    .orElseThrow(() -> new RuntimeException("Transportadora inválida"));
+            pessoa.setTransportadora(transportadora);
+        } else {
+            pessoa.setTransportadora(null);
+        }
 
         pessoa.setTipoPessoa(dto.getTipoPessoa());
         pessoa.setDocumento(dto.getDocumento());
@@ -143,6 +157,10 @@ public class PessoaService {
         dto.setAtivo(p.getAtivo());
         dto.setObservacao(p.getObservacao());
 
+        if (p.getTransportadora() != null) {
+            dto.setIdTransportadora(p.getTransportadora().getIdTransportadora());
+        }
+
         // cidade
         if (p.getCidade() != null) {
             dto.setIdCidade(p.getCidade().getIdCidade());
@@ -196,6 +214,13 @@ public class PessoaService {
         p.setDataCadastro(LocalDate.now()); // evita NULL
         p.setBairroPessoa(dto.getBairroPessoa());
         p.setObservacao(dto.getObservacao());
+
+        // ------- BUSCAR TRANSPORTADORA (NOVO) --------
+    if (dto.getIdTransportadora() != null) {
+        Transportadora trans = transportadoraRepository.findById(dto.getIdTransportadora())
+                .orElseThrow(() -> new RuntimeException("Transportadora inválida"));
+        p.setTransportadora(trans);
+    }
 
         // ------- BUSCAR CIDADE --------
         if (dto.getIdCidade() != null) {

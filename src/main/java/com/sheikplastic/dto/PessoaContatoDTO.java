@@ -11,4 +11,5 @@ public class PessoaContatoDTO {
     private String tipoContatoDescricao;
     private String contato;
     private String observacao;
+       private Long idPessoa;
 }

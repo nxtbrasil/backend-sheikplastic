@@ -9,9 +9,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface HistoricoPrecoRepository extends JpaRepository<HistoricoPreco, Long> {
+
+    
+    List<HistoricoPreco> findByIdPessoaAndSeqProduto(Long idPessoa, Long seqProduto);
 
     @Query(
         value = """
@@ -59,5 +63,23 @@ public interface HistoricoPrecoRepository extends JpaRepository<HistoricoPreco, 
         @Param("idPessoa") Long idPessoa,
         @Param("seqProduto") Long seqProduto,
         @Param("valorVenda") BigDecimal valorVenda
+    );
+
+
+
+      @Modifying
+    @Query("""
+        UPDATE HistoricoPreco h 
+           SET h.dtValidade = :data
+         WHERE h.idPessoa = :idPessoa
+           AND h.seqProduto = :seqProduto
+           AND h.valorVenda = :valorVenda
+           AND h.dtValidade IS NULL
+    """)
+    void fecharHistorico(
+        Integer idPessoa,
+        Integer seqProduto,
+        BigDecimal valorVenda,
+        LocalDateTime data
     );
 }

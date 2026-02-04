@@ -1,6 +1,7 @@
 package com.sheikplastic.controller;
 
 import com.sheikplastic.model.Produto;
+import com.sheikplastic.service.PessoaProdutoService;
 import com.sheikplastic.service.ProdutoService;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,8 +13,11 @@ public class ProdutoController {
 
     private final ProdutoService service;
 
-    public ProdutoController(ProdutoService service) {
+    private final PessoaProdutoService pessoaProdutoService;
+
+    public ProdutoController(ProdutoService service, PessoaProdutoService pessoaProdutoService) {
         this.service = service;
+        this.pessoaProdutoService = pessoaProdutoService;
     }
 
     @GetMapping
@@ -44,4 +48,10 @@ public class ProdutoController {
     public void excluir(@PathVariable Long id) {
         service.excluir(id);
     }
+
+        @GetMapping("/combo")
+    public List<Produto> listarParaCombo() {
+        return pessoaProdutoService.listarParaCombo();
+    }
+
 }

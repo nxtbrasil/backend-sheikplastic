@@ -5,27 +5,23 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
-@Data
 @Table(name = "HistoricoPreco")
+@Data
 public class HistoricoPreco {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idHistoricoPreco;
+    private Long id;
 
-    @Column(nullable = false)
-    private Long idPessoa;
+    private Integer idPessoa;
+    private Integer seqProduto;
 
-    @Column(nullable = false)
-    private Long seqProduto;
-
-    @Column(nullable = false)
     private BigDecimal valorVenda;
 
-    @Column
-    private LocalDate dtValidade;
+    private LocalDateTime dtValidade;
 
     // getters e setters
 }

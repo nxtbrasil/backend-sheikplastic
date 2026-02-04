@@ -1,22 +1,16 @@
 package com.sheikplastic.dto;
 
 import java.math.BigDecimal;
-
+    
 import lombok.Data;
 
 @Data
-public class PessoaProdutoRequest {
+public class ProdutoPessoaDTO {
 
-    // seq interno da PessoaProduto
     private Long seqProduto;
-
-    // FK do Produto
-    private Integer idProduto;
-
+    private String nomeProduto;
     private String complementoProduto;
+    private BigDecimal valorVenda;
     private String unpProduto;
     private String unvProduto;
-
-    private BigDecimal valorVenda;
-    private BigDecimal valorVendaAnterior;
 }
