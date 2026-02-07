@@ -14,19 +14,20 @@ import org.springframework.stereotype.Repository;
 public interface PessoaRepository extends JpaRepository<Pessoa, Long> {
 
     @Query("""
-        SELECT DISTINCT p
-        FROM Pessoa p
-        LEFT JOIN FETCH p.contatos c
-        LEFT JOIN FETCH c.tipoContato
-        """)
+            SELECT DISTINCT p
+            FROM Pessoa p
+            LEFT JOIN FETCH p.contatos c
+            LEFT JOIN FETCH c.tipoContato
+            ORDER BY p.dataCadastro DESC
+            """)
     List<Pessoa> findAllWithContatos();
 
     @Query("""
-        SELECT p
-        FROM Pessoa p
-        LEFT JOIN FETCH p.contatos c
-        LEFT JOIN FETCH c.tipoContato
-        WHERE p.id = :id
-        """)
+            SELECT p
+            FROM Pessoa p
+            LEFT JOIN FETCH p.contatos c
+            LEFT JOIN FETCH c.tipoContato
+            WHERE p.id = :id
+            """)
     Optional<Pessoa> findByIdWithContatos(Long id);
 }
